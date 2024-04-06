@@ -37,7 +37,7 @@ def push_knights(start, direction):
             if index in push_set:
                 continue
             ti, tj, th, tw, tk = knights[index]
-            if ni <= ti + th - 1 and ti <= ni + h - 1 and nj <= tj + w - 1 and tj <= nj + w - 1:
+            if ni <= ti + th - 1 and ti <= ni + h - 1 and nj <= tj + tw - 1 and tj <= nj + w - 1:
                 q.append(index)
                 push_set.add(index)
     damage[start] = 0
