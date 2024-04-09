@@ -14,7 +14,7 @@ def bfs(si, sj, ei, ej):
 
     while q:
         ci, cj = q.popleft()
-        if (ci, cj) == (ei, ej):  # 공경 대상자에 도착
+        if (ci, cj) == (ei, ej):  # 공격 대상자에 도착
             arr[ei][ej] = max(0, arr[ei][ej] - damage)
             while True:
                 ci, cj = v[ci][cj]
@@ -32,7 +32,7 @@ def bfs(si, sj, ei, ej):
 
 def bomb(si, sj, ei, ej):
     damage = arr[si][sj]
-    arr[ei][ei] = max(0, arr[ei][ej] - damage)
+    arr[ei][ej] = max(0, arr[ei][ej] - damage)
     dis = [-1, 0, 0, 1, -1, 1, 1, -1]
     djs = [0, -1, 1, 0, -1, 1, -1, 1]
     for di, dj in zip(dis, djs):
@@ -56,7 +56,7 @@ for turn in range(1, K+1):
     for i in range(N):
         for j in range(M):
             if arr[i][j] == 0 : continue
-            if arr[i][j] > mx or (arr[i][j] == mn and turn_list[i][j] < mn) or \
+            if arr[i][j] > mx or (arr[i][j] == mx and turn_list[i][j] < mn) or \
               (arr[i][j] == mx and turn_list[i][j] == mn and ei + ej > i + j) or \
               (arr[i][j] == mx and turn_list[i][j] == mn and ei + ej == i + j and ej > j):
                 mx, mn, ei, ej = arr[i][j], turn_list[i][j], i, j
