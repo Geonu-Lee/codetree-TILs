@@ -1,10 +1,10 @@
 import sys
 
-# sys.stdin = open("input.txt")
+sys.stdin = open("input.txt")
 
 N, M, K = list(map(int, sys.stdin.readline().split()))
 arr = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-gun = [[[] * N for _ in range(N)] for _ in range(N)]
+gun = [[[] for _ in range(N)] for _ in range(N)]
 
 # 그리드별로 gun 정보 저장
 for i in range(N):
@@ -24,20 +24,18 @@ for m in range(1, M+1):
     players[m] = [i-1, j-1, d, p, 0, 0]  # i, j, 방향, 파워, gun, score
     arr[i-1][j-1] = m
 
-def leave(index):
-    ci, cj, cd, cp, cg, cs = players[index]
+def leave(index, ci, cj, cd, cp, cg, cs):
+    # ci, cj, cd, cp, cg, cs = players[index]
     for turn in range(4):
-        ni, nj = ci + di[(cd+k) % 4], cj + dj[(cd+k) % 4]
+        ni, nj = ci + di[(cd+turn) % 4], cj + dj[(cd+turn) % 4]
         if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] == 0:
             if len(gun[ni][nj]) != 0:
                 cg = max(gun[ni][nj])
                 gun[ni][nj].remove(cg)
             arr[ni][nj] = index
-            players[index] = [ni, nj, (cd+k) % 4, cp, cg, cs]
+            players[index] = [ni, nj, (cd+turn) % 4, cp, cg, cs]
 
             return
-
-
 
 for k in range(K):    # K turn 진행
     for index in players:   # 각 player 마다 순차적으로 진행
@@ -56,8 +54,8 @@ for k in range(K):    # K turn 진행
                 if cg < gun_mx:
                     if cg > 0:
                         gun[ni][nj].append(cg)
+                    gun[ni][nj].remove(gun_mx)
                     cg = gun_mx
-                    gun[ni][nj].append(gun_mx)
             arr[ni][nj] = index
             players[index] = [ni, nj, cd, cp, cg, cs]
 
@@ -68,8 +66,7 @@ for k in range(K):    # K turn 진행
             # 내가 이긴 경우
             if (cp + cg) > (ep + eg) or ((cp + cg) == (ep + eg) and cp > ep):
                 cs += ((cp + cg) - (ep + eg))
-                leave(enemy)
-
+                leave(enemy, ni, nj, ed, ep, 0, es)
                 if cg < eg:
                     if cg > 0:
                         gun[ni][nj].append(cg)
@@ -82,7 +79,7 @@ for k in range(K):    # K turn 진행
             # 상대방이 이긴 경우
             else:
                 es += ((ep + eg) - (cp + cg))
-                leave(index)
+                leave(index, ni, nj, cd, cp, 0, cs)
                 if eg < cg:
                     if eg > 0:
                         gun[ni][nj].append(eg)
