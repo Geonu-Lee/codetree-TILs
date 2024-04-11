@@ -1,6 +1,6 @@
 import sys
 
-sys.stdin = open("input.txt")
+# sys.stdin = open("input.txt")
 
 N, M, K = list(map(int, sys.stdin.readline().split()))
 arr = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
